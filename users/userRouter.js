@@ -18,12 +18,26 @@ router.get('/', async (req, res) => {
         res.status(200).json(users)
     } catch (error) {
         console.log(error);
-        res.status(500).json({message: "Error getting users."})
+        res.status(500).json({ message: "Error getting users." })
     }
 });
 
 router.get('/:id', (req, res) => {
-
+    Users.getById(req.params.id)
+        .then(user => {
+            if (user) {
+                res.status(200).json({
+                    user
+                })
+            } else {
+                res.status(404).json({
+                    message: "We cannot find the user you're looking for."
+                })
+            }
+        })
+        .catch (err => {
+                res.status(500).json({ err })
+            })
 });
 
 router.get('/:id/posts', (req, res) => {
